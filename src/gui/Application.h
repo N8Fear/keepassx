@@ -32,9 +32,6 @@ public:
     void setMainWindow(QWidget* mainWindow);
 
     bool event(QEvent* event) Q_DECL_OVERRIDE;
-#ifdef Q_WS_X11
-    bool x11EventFilter(XEvent* event) Q_DECL_OVERRIDE;
-#endif
 
 Q_SIGNALS:
     void openFile(const QString& filename);
