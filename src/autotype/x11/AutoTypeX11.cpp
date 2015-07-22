@@ -847,4 +847,3 @@ bool AutoTypePlatformX11::raiseWindow(WId window)
     return true;
 }
 
-Q_EXPORT_PLUGIN2(keepassx-autotype-x11, AutoTypePlatformX11)
