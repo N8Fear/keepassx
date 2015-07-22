@@ -713,7 +713,7 @@ void AutoTypePlatformX11::SendKeyPressedEvent(KeySym keysym)
     event.y = 1;
     event.x_root = 1;
     event.y_root = 1;
-    event.same_screen = TRUE;
+    event.same_screen = True;
 
     Window root, child;
     int root_x, root_y, x, y;
