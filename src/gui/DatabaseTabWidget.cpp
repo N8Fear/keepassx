@@ -38,8 +38,8 @@
 #include "gui/group/GroupView.h"
 
 DatabaseManagerStruct::DatabaseManagerStruct()
-    : dbWidget(Q_NULLPTR)
-    , lockFile(Q_NULLPTR)
+    : dbWidget(nullptr)
+    , lockFile(nullptr)
     , saveToFilename(false)
     , modified(false)
     , readOnly(false)
@@ -161,7 +161,7 @@ void DatabaseTabWidget::openDatabase(const QString& fileName, const QString& pw,
             if (result == QMessageBox::No) {
                 dbStruct.readOnly = true;
                 delete lockFile;
-                lockFile = Q_NULLPTR;
+                lockFile = nullptr;
             }
             else {
                 // take over the lock file if possible
@@ -559,7 +559,7 @@ Database* DatabaseTabWidget::indexDatabase(int index)
         }
     }
 
-    return Q_NULLPTR;
+    return nullptr;
 }
 
 DatabaseManagerStruct DatabaseTabWidget::indexDatabaseManagerStruct(int index)
@@ -587,7 +587,7 @@ Database* DatabaseTabWidget::databaseFromDatabaseWidget(DatabaseWidget* dbWidget
         }
     }
 
-    return Q_NULLPTR;
+    return nullptr;
 }
 
 void DatabaseTabWidget::insertDatabase(Database* db, const DatabaseManagerStruct& dbStruct)
@@ -612,7 +612,7 @@ DatabaseWidget* DatabaseTabWidget::currentDatabaseWidget()
         return m_dbList[db].dbWidget;
     }
     else {
-        return Q_NULLPTR;
+        return nullptr;
     }
 }
 

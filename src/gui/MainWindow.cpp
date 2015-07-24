@@ -34,7 +34,7 @@ const QString MainWindow::BaseWindowTitle = "KeePassX";
 
 MainWindow::MainWindow()
     : m_ui(new Ui::MainWindow())
-    , m_trayIcon(Q_NULLPTR)
+    , m_trayIcon(nullptr)
 {
     m_ui->setupUi(this);
 
@@ -513,7 +513,7 @@ void MainWindow::updateTrayIcon()
         if (m_trayIcon) {
             m_trayIcon->hide();
             delete m_trayIcon;
-            m_trayIcon = Q_NULLPTR;
+            m_trayIcon = nullptr;
         }
     }
 }

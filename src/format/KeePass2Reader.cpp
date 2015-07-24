@@ -34,12 +34,12 @@
 #include "streams/SymmetricCipherStream.h"
 
 KeePass2Reader::KeePass2Reader()
-    : m_device(Q_NULLPTR)
-    , m_headerStream(Q_NULLPTR)
+    : m_device(nullptr)
+    , m_headerStream(nullptr)
     , m_error(false)
     , m_headerEnd(false)
     , m_saveXml(false)
-    , m_db(Q_NULLPTR)
+    , m_db(nullptr)
 {
 }
 
@@ -67,7 +67,7 @@ Database* KeePass2Reader::readDatabase(QIODevice* device, const CompositeKey& ke
     quint32 signature1 = Endian::readUInt32(m_headerStream, KeePass2::BYTEORDER, &ok);
     if (!ok || signature1 != KeePass2::SIGNATURE_1) {
         raiseError(tr("Not a KeePass database."));
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     quint32 signature2 = Endian::readUInt32(m_headerStream, KeePass2::BYTEORDER, &ok);
@@ -80,7 +80,7 @@ Database* KeePass2Reader::readDatabase(QIODevice* device, const CompositeKey& ke
     }
     else if (!ok || signature2 != KeePass2::SIGNATURE_2) {
         raiseError(tr("Not a KeePass database."));
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     quint32 version = Endian::readUInt32(m_headerStream, KeePass2::BYTEORDER, &ok)
@@ -88,7 +88,7 @@ Database* KeePass2Reader::readDatabase(QIODevice* device, const CompositeKey& ke
     quint32 maxVersion = KeePass2::FILE_VERSION & KeePass2::FILE_VERSION_CRITICAL_MASK;
     if (!ok || (version < KeePass2::FILE_VERSION_MIN) || (version > maxVersion)) {
         raiseError(tr("Unsupported KeePass database version."));
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     while (readHeaderField() && !hasError()) {
@@ -97,7 +97,7 @@ Database* KeePass2Reader::readDatabase(QIODevice* device, const CompositeKey& ke
     headerStream.close();
 
     if (hasError()) {
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     // check if all required headers were present
@@ -105,12 +105,12 @@ Database* KeePass2Reader::readDatabase(QIODevice* device, const CompositeKey& ke
             || m_streamStartBytes.isEmpty() || m_protectedStreamKey.isEmpty()
             || m_db->cipher().isNull()) {
         raiseError("missing database headers");
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     if (!m_db->setKey(key, m_transformSeed, false)) {
         raiseError(tr("Unable to calculate master key"));
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     CryptoHash hash(CryptoHash::Sha256);
@@ -122,24 +122,24 @@ Database* KeePass2Reader::readDatabase(QIODevice* device, const CompositeKey& ke
                                        SymmetricCipher::Cbc, SymmetricCipher::Decrypt);
     if (!cipherStream.init(finalKey, m_encryptionIV)) {
         raiseError(cipherStream.errorString());
-        return Q_NULLPTR;
+        return nullptr;
     }
     if (!cipherStream.open(QIODevice::ReadOnly)) {
         raiseError(cipherStream.errorString());
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     QByteArray realStart = cipherStream.read(32);
 
     if (realStart != m_streamStartBytes) {
         raiseError(tr("Wrong key or database file is corrupt."));
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     HashedBlockStream hashedStream(&cipherStream);
     if (!hashedStream.open(QIODevice::ReadOnly)) {
         raiseError(hashedStream.errorString());
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     QIODevice* xmlDevice;
@@ -153,7 +153,7 @@ Database* KeePass2Reader::readDatabase(QIODevice* device, const CompositeKey& ke
         ioCompressor->setStreamFormat(QtIOCompressor::GzipFormat);
         if (!ioCompressor->open(QIODevice::ReadOnly)) {
             raiseError(ioCompressor->errorString());
-            return Q_NULLPTR;
+            return nullptr;
         }
         xmlDevice = ioCompressor.data();
     }
@@ -161,7 +161,7 @@ Database* KeePass2Reader::readDatabase(QIODevice* device, const CompositeKey& ke
     KeePass2RandomStream randomStream;
     if (!randomStream.init(m_protectedStreamKey)) {
         raiseError(randomStream.errorString());
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     QScopedPointer<QBuffer> buffer;
@@ -178,7 +178,7 @@ Database* KeePass2Reader::readDatabase(QIODevice* device, const CompositeKey& ke
 
     if (xmlReader.hasError()) {
         raiseError(xmlReader.errorString());
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     Q_ASSERT(version < 0x00030001 || !xmlReader.headerHash().isEmpty());
@@ -187,7 +187,7 @@ Database* KeePass2Reader::readDatabase(QIODevice* device, const CompositeKey& ke
         QByteArray headerHash = CryptoHash::hash(headerStream.storedData(), CryptoHash::Sha256);
         if (headerHash != xmlReader.headerHash()) {
             raiseError("Head doesn't match hash");
-            return Q_NULLPTR;
+            return nullptr;
         }
     }
 
@@ -199,14 +199,14 @@ Database* KeePass2Reader::readDatabase(const QString& filename, const CompositeK
     QFile file(filename);
     if (!file.open(QFile::ReadOnly)) {
         raiseError(file.errorString());
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     QScopedPointer<Database> db(readDatabase(&file, key));
 
     if (file.error() != QFile::NoError) {
         raiseError(file.errorString());
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     return db.take();

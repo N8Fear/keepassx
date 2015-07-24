@@ -31,7 +31,6 @@
 
 #include "autotype/AutoTypePlatformPlugin.h"
 #include "autotype/AutoTypeAction.h"
-#include "core/Global.h"
 
 #define N_MOD_INDICES (Mod5MapIndex + 1)
 
