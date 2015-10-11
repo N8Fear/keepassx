@@ -31,8 +31,6 @@ include(CheckCXXSourceCompiles)
 
 option(WITH_TESTS "Enable building of unit tests" ON)
 option(WITH_GUI_TESTS "Enable building of GUI tests" OFF)
-option(WITH_CXX11 "Build with the C++ 11 standard" ON)
-option(WITH_LTO "Enable Link Time Optimization (LTO)" OFF)
 
 set(KEEPASSX_VERSION "2.0 beta 2")
 set(KEEPASSX_VERSION_NUM "1.9.92")
@@ -100,7 +98,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--no-add-needed -Wl,--as-needed")
   set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,relro")
 endif()
-
 
 add_gcc_compiler_cxxflags("-std=c++11")
 

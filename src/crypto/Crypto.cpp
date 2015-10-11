@@ -40,10 +40,6 @@ bool Crypto::init()
         return true;
     }
 
-    // libgcrypt >= 1.6 doesn't allow custom thread callbacks anymore.
-#if !defined(GCRYPT_VERSION_NUMBER) || (GCRYPT_VERSION_NUMBER < 0x010600)
-    gcry_control(GCRYCTL_SET_THREAD_CBS, &gcry_threads_qt);
-#endif
     m_backendVersion = QString::fromLocal8Bit(gcry_check_version(0));
     gcry_check_version(0);
     gcry_control(GCRYCTL_INITIALIZATION_FINISHED, 0);

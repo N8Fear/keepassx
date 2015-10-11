@@ -210,7 +210,7 @@ int AutoTypePlatformX11::platformEventFilter(void* event)
         xcb_key_press_event_t* keyPressEvent = static_cast<xcb_key_press_event_t*>(event);
         if (keyPressEvent->detail == m_currentGlobalKeycode
                 && (keyPressEvent->state & m_modifierMask) == m_currentGlobalNativeModifiers
-                && !QApplication::focusWidget()
+                && (!QApplication::activeWindow() || QApplication::activeWindow()->isMinimized())
                 && m_loaded) {
             if (type == XCB_KEY_PRESS) {
                 Q_EMIT globalShortcutTriggered();
@@ -383,7 +383,7 @@ bool AutoTypePlatformX11::isTopLevelWindow(Window window)
     int format;
     unsigned long nitems;
     unsigned long after;
-    unsigned char* data = Q_NULLPTR;
+    unsigned char* data = nullptr;
     int retVal = XGetWindowProperty(m_dpy, window, m_atomWmState, 0, 0, False, AnyPropertyType, &type, &format,
                                     &nitems, &after, &data);
     if (data) {
@@ -578,7 +578,7 @@ XkbDescPtr AutoTypePlatformX11::getKeyboard()
     XID keyboard_id = XkbUseCoreKbd;
     XDeviceInfo* devices = XListInputDevices(m_dpy, &num_devices);
     if (!devices) {
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     for (int i = 0; i < num_devices; i++) {
@@ -867,4 +867,3 @@ bool AutoTypePlatformX11::raiseWindow(WId window)
 
     return true;
 }
-

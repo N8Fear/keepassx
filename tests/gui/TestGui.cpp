@@ -30,7 +30,6 @@
 #include <QToolButton>
 
 #include "config-keepassx-tests.h"
-#include "tests.h"
 #include "core/Config.h"
 #include "core/Database.h"
 #include "core/Entry.h"
@@ -57,6 +56,7 @@ void TestGui::initTestCase()
     m_mainWindow = new MainWindow();
     m_tabWidget = m_mainWindow->findChild<DatabaseTabWidget*>("tabWidget");
     m_mainWindow->show();
+    m_mainWindow->activateWindow();
     Tools::wait(50);
 
     QByteArray tmpData;

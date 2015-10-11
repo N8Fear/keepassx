@@ -42,17 +42,17 @@ class AutoTypePlatformX11 : public QObject, public AutoTypePlatformInterface
 
 public:
     AutoTypePlatformX11();
-    bool isAvailable() Q_DECL_OVERRIDE;
-    void unload() Q_DECL_OVERRIDE;
-    QStringList windowTitles() Q_DECL_OVERRIDE;
-    WId activeWindow() Q_DECL_OVERRIDE;
-    QString activeWindowTitle() Q_DECL_OVERRIDE;
-    bool registerGlobalShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) Q_DECL_OVERRIDE;
-    void unregisterGlobalShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) Q_DECL_OVERRIDE;
-    int platformEventFilter(void* event) Q_DECL_OVERRIDE;
-    int initialTimeout() Q_DECL_OVERRIDE;
-    bool raiseWindow(WId window) Q_DECL_OVERRIDE;
-    AutoTypeExecutor* createExecutor() Q_DECL_OVERRIDE;
+    bool isAvailable() override;
+    void unload() override;
+    QStringList windowTitles() override;
+    WId activeWindow() override;
+    QString activeWindowTitle() override;
+    bool registerGlobalShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) override;
+    void unregisterGlobalShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) override;
+    int platformEventFilter(void* event) override;
+    int initialTimeout() override;
+    bool raiseWindow(WId window) override;
+    AutoTypeExecutor* createExecutor() override;
 
     KeySym charToKeySym(const QChar& ch);
     KeySym keyToKeySym(Qt::Key key);
@@ -124,8 +124,8 @@ class AutoTypeExecturorX11 : public AutoTypeExecutor
 public:
     explicit AutoTypeExecturorX11(AutoTypePlatformX11* platform);
 
-    void execChar(AutoTypeChar* action) Q_DECL_OVERRIDE;
-    void execKey(AutoTypeKey* action) Q_DECL_OVERRIDE;
+    void execChar(AutoTypeChar* action) override;
+    void execKey(AutoTypeKey* action) override;
 
 private:
     AutoTypePlatformX11* const m_platform;
