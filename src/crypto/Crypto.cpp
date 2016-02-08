@@ -41,6 +41,7 @@ bool Crypto::init()
     }
 
     m_backendVersion = QString::fromLocal8Bit(gcry_check_version(0));
+    gcry_check_version(0);
     gcry_control(GCRYCTL_INITIALIZATION_FINISHED, 0);
 
     if (!checkAlgorithms()) {
